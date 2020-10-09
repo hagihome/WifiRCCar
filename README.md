@@ -1,2 +1,2 @@
 # WifiRCCar
-Wifi Radio Control Car
+Wifi RC Car Project
