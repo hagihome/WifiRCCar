@@ -2,14 +2,14 @@ import http.server # SimpleHTTPServer
 import json
 import argparse
 from Motor import Motor
-from Camera import Camera
+#from Camera import Camera
 import io
 import base64
 
 # blue, green
 left  = Motor("left" , 23, 24)
 right = Motor("right", 17, 27)
-camera = Camera("camera", 320,240)
+#camera = Camera("camera", 320,240)
 
 def message_handler(message):
   buffered = io.BytesIO()
@@ -27,8 +27,8 @@ def message_handler(message):
   elif message['left'] == 'brake':
     left.brake()
   
-  if message['camera'] == 'cap':
-    buffered = camera.capture()
+  #if message['camera'] == 'cap':
+  #  buffered = camera.capture()
 
   return buffered
 
@@ -39,11 +39,12 @@ class HTTPHandler( http.server.BaseHTTPRequestHandler):
       request = json.loads(self.rfile.read(content_len).decode('utf-8'))
       # process
       cap = message_handler(request)
-      cap_byte = cap.getvalue()
-      cap_base64 = base64.b64encode(cap_byte)
-      cap_str    = cap_base64.decode('utf-8')
+      #cap_byte = cap.getvalue()
+      #cap_base64 = base64.b64encode(cap_byte)
+      #cap_str    = cap_base64.decode('utf-8')
       # response
-      response = {'status':200, 'img':cap_str}
+      #response = {'status':200, 'img':cap_str}
+      response = {'status':200}
       self.send_response(200)
       self.send_header('Content-type','application/json')
       self.end_headers()
@@ -65,16 +66,15 @@ class HTTPHandler( http.server.BaseHTTPRequestHandler):
 # argparse
 def parse_arg():
   parser = argparse.ArgumentParser("my_parse")
-  parser.add_argument('--server_name','-s',required=False,default='localhost')
   parser.add_argument('--port','-p',required=False,type=int, default=8000)
 
   args = parser.parse_args()
 
-  return args.server_name, args.port
+  return args.port
 
 def main():
 
-  server_name, port = parse_arg()
+  port = parse_arg()
   server = http.server.HTTPServer(('',port),HTTPHandler)
   server.serve_forever()
 
