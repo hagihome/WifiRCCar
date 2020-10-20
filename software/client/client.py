@@ -11,7 +11,7 @@ class ClientApplication( tk.Frame ):
 
     def __init__( self, master ):
         super().__init__(master)
-        self.ip="192.168.1.23"
+        self.ip="192.168.1.13"
         self.port=8000
         self.url = "http://"+self.ip+":"+str(self.port)
         self.headers = {'content-type':'application/json'}
